@@ -49,11 +49,12 @@ public class BuildImageController {
 	}*/
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView findall() throws IOException {
+	public ModelAndView findall(@RequestParam(required=false) String[] directoryName) throws IOException {
 		
+		System.out.println(directoryName);
 		File buildDirectory = new File(buildService.getBuildBaseDir());
 		
-		Iterable<Directory> directorys = buildService.getDirectorys(buildDirectory, null);
+//		Iterable<Directory> directorys = buildService.getDirectorys(buildDirectory, null);
 
 		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
 
