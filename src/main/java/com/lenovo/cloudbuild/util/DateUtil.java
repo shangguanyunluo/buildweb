@@ -3,7 +3,7 @@ package com.lenovo.cloudbuild.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FileUtil {
+public class DateUtil {
 
 	/**
 	 * 时间戳转化为日期格式
