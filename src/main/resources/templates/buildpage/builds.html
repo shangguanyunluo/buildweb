@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head(title=~{::title/text()})">
+<title>Build : View all</title>
+</head>
+</head>
+<body>
+	<div class="container">
+		<div th:replace="fragments :: cloudbuild-navbar"></div>
+		<div class="float-right mt-2">
+			<a class="btn btn-primary btn-sm" href="form.html"
+				th:href="@{/build}">Search Build</a>
+		</div>
+		<h4 class="float-left mt-2">Builds : View all</h4>
+		<table class="table table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Last Modified</th>
+					<th>Size</th>
+					<th>Description</th>
+					<th>Operation</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${builds.empty}">
+					<td colspan="6">No Build</td>
+				</tr>
+				<tr th:each="build : ${builds}">
+					<td th:text="${build.id}"></td>
+					<td th:text="${build.name}"></td>
+					<td th:text="${#calendars.format(build.modifiedTime,'yyyy-MM-dd HH:mm:ss')}">July
+						11, 2012 2:17:16 PM CDT</td>
+					<td th:text="${build.size}">Size</td>
+					<td th:text="${build.description}">Description</td>
+					<td><a href="#">Download</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
