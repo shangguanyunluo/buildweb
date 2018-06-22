@@ -9,15 +9,21 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lenovo.cloudbuild.model.BuildImage;
+import com.lenovo.cloudbuild.model.GlobalVariables;
 
 @Service
 public class BuildImageService {
+	Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	private GlobalVariables globalVariables;
+	
 	private static AtomicLong counter = new AtomicLong();
 	private final ConcurrentMap<Long, BuildImage> builds = new ConcurrentHashMap<Long, BuildImage>();
-	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/*
 	 * 列出指定目录下（包括其子目录）的所有文件
@@ -39,8 +45,9 @@ public class BuildImageService {
 					listDirectory(file);
 				else {
 					BuildImage buildImage = new BuildImage(file.getName(), new Date(file.lastModified()), file.length(),
-							"");
-					log.info("builds contains buildImage "+file.getName()+" :"+builds.values().contains(buildImage));
+							"", file.getAbsolutePath());
+					log.info("builds contains buildImage " + file.getName() + " :"
+							+ builds.values().contains(buildImage));
 					if (!builds.values().contains(buildImage)) {
 						Long imageId = counter.incrementAndGet();
 						buildImage.setId(imageId);
@@ -57,9 +64,18 @@ public class BuildImageService {
 		return this.builds.values();
 	}
 
+	public BuildImage getBuildById(Long id) {
+		return builds.get(id);
+	}
+	
+	public String getBuildBaseDir() {
+		return globalVariables.getBuildImageBaseDir();
+	}
+	
+
 	public static void main(String[] args) throws IOException {
 		BuildImageService imageService = new BuildImageService();
-		imageService.listDirectory(new File("src/main/resources/static/builds"));
+		imageService.listDirectory(new File("E:/builds"));
 
 	}
 
