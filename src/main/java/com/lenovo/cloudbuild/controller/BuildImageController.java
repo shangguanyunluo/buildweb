@@ -13,12 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lenovo.cloudbuild.model.BuildImage;
+import com.lenovo.cloudbuild.model.Directory;
 import com.lenovo.cloudbuild.service.BuildImageService;
 
 /**
@@ -36,10 +38,22 @@ public class BuildImageController {
 	@Autowired
 	private BuildImageService buildService;
 
+	/*@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView findall() throws IOException {
+		
+		File buildDirectory = new File(buildService.getBuildBaseDir());
+
+		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
+
+		return new ModelAndView("buildpage/builds", "builds", builds);
+	}*/
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView findall() throws IOException {
 		
 		File buildDirectory = new File(buildService.getBuildBaseDir());
+		
+		Iterable<Directory> directorys = buildService.getDirectorys(buildDirectory, null);
 
 		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
 

@@ -90,7 +90,7 @@ public class BuildImage {
 		if (obj instanceof BuildImage) {
 			BuildImage buildImage = (BuildImage) obj;
 			// System.out.println("equal"+ buildImage.name);
-			return (name.equals(buildImage.name));
+			return (absolutePath.equals(buildImage.getAbsolutePath()));
 		}
 		return super.equals(obj);
 	}
@@ -99,7 +99,7 @@ public class BuildImage {
 	public int hashCode() {
 		// BuildImage buildImage = (BuildImage) this;
 		// System.out.println("Hash" + buildImage.name);
-		return name.hashCode();
+		return absolutePath.hashCode();
 	}
 
 }

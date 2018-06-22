@@ -13,18 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lenovo.cloudbuild.model.BuildImage;
+import com.lenovo.cloudbuild.model.Directory;
 import com.lenovo.cloudbuild.model.GlobalVariables;
 import com.lenovo.cloudbuild.service.BuildImageService;
 
 @Service
 public class BuildImageServiceImpl implements BuildImageService {
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Autowired
 	private GlobalVariables globalVariables;
-	
+
 	private static AtomicLong counter = new AtomicLong();
 	private final ConcurrentMap<Long, BuildImage> builds = new ConcurrentHashMap<Long, BuildImage>();
+	private final ConcurrentMap<Long, Directory> directorys = new ConcurrentHashMap<Long, Directory>();
 
 	/*
 	 * 列出指定目录下（包括其子目录）的所有文件
@@ -62,6 +64,25 @@ public class BuildImageServiceImpl implements BuildImageService {
 		return builds.values();
 	}
 
+	public Iterable<Directory> getDirectorys(File dir, Long parentId) {
+		if (!dir.exists())
+			throw new IllegalArgumentException("Directory:" + dir + "not exists.");
+		if (!dir.isDirectory()) {
+			throw new IllegalArgumentException(dir + "isn't directory.");
+		}
+
+		File[] listFiles = dir.listFiles();
+		for (File file : listFiles) {
+			if (file.isDirectory()) {
+				long directoryId = counter.incrementAndGet();
+				directorys.put(directoryId, new Directory(directoryId, file.getName(), parentId));
+				getDirectorys(file, directoryId);
+			}
+//			System.out.println(file);
+		}
+		return directorys.values();
+	}
+
 	@Override
 	public Iterable<BuildImage> findAll() {
 		return this.builds.values();
@@ -71,16 +92,16 @@ public class BuildImageServiceImpl implements BuildImageService {
 	public BuildImage getBuildById(Long id) {
 		return builds.get(id);
 	}
-	
+
 	@Override
 	public String getBuildBaseDir() {
 		return globalVariables.getBuildImageBaseDir();
 	}
-	
 
 	public static void main(String[] args) throws IOException {
-		BuildImageService imageService = new BuildImageServiceImpl();
-		imageService.listDirectory(new File("E:/builds"));
+		BuildImageServiceImpl imageService = new BuildImageServiceImpl();
+		Iterable<Directory> directorys = imageService.getDirectorys(new File("E:/builds"), null);
+		System.out.println(directorys);
 
 	}
 
