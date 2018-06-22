@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lenovo.cloudbuild.model.BuildImage;
-import com.lenovo.cloudbuild.model.GlobalVariables;
 import com.lenovo.cloudbuild.service.BuildImageService;
 
 /**

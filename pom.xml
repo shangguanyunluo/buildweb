@@ -6,7 +6,8 @@
 	<groupId>com.lenovo</groupId>
 	<artifactId>cloudbuild</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
+<!-- 	<packaging>jar</packaging> -->
 
 	<name>cloudbuild</name>
 	<description>Demo project for Spring Boot</description>
@@ -25,6 +26,13 @@
 	</properties>
 
 	<dependencies>
+		<!--spring boot tomcat（默认可以不用配置，但当需要把当前web应用布置到外部servlet容器时就需要配置，并将scope配置为provided） -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
