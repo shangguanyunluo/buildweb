@@ -3,9 +3,10 @@
 <head th:fragment="head (title)">
 <!-- <meta charset="UTF-8"> -->
 <title th:text="${title}">Fragements</title>
-<script src="/webjars/jquery/dist/jquery.min.js"></script>  
+<script type="text/javascript"
+	th:src="@{/webjars/jquery/dist/jquery.min.js} "></script>
 <link th:href="@{/webjars/bootstrap/dist/css/bootstrap.css}"
-	rel="stylesheet"></link>   
+	rel="stylesheet"></link>
 </head>
 <body>
 	<div class="container">
@@ -16,8 +17,10 @@
 					href="messages.html">Messages</a></li>
 			</ul>
 		</nav>
-		<nav th:fragment="cloudbuild-navbar" class="navbar navbar-dark bg-primary">
-			<a class="navbar-brand" href="http://localhost:8080/build">Cloud Build</a>
+		<nav th:fragment="cloudbuild-navbar"
+			class="navbar navbar-dark bg-primary">
+			<a class="navbar-brand" href="http://localhost:8080/build">Cloud
+				Build</a>
 			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 				<li class="nav-item"><a class="nav-link" th:href="@{/build}"
 					href="messages.html">Build</a></li>

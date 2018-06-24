@@ -7,18 +7,39 @@
 <body>
 	<div class="container">
 		<div th:replace="fragments :: cloudbuild-navbar"></div>
-		<div class="float-right mt-2">
-			<a class="btn btn-primary btn-sm" href="form.html"
-				th:href="@{/build}">Search Build</a>
-		</div>
-		<h4 class="float-left mt-2">
-			<select class="selectpicker show-menu-arrow bootstrap-select">
-				<option>Mustard</option>
-				<option>Ketchup</option>
-				<option>Relish</option>
-			</select>
 
-		</h4>
+		<div class="float-left m-2 col-sm-12 row pl-0 pr-0">
+			<div class="col-sm-3 float-left pl-0">
+				<select class="form-control  pl-0">
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
+
+			</div>
+			<div class="col-sm-3  ml-0">
+				<select
+					class="selectpicker show-menu-arrow bootstrap-select  form-control">
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
+
+			</div>
+			<div class="col-sm-3">
+				<select
+					class="selectpicker show-menu-arrow bootstrap-select  form-control">
+					<option>Mustard</option>
+					<option>Ketchup</option>
+					<option>Relish</option>
+				</select>
+			</div>
+			<div  class="col-sm-3 mt-1 float-right">
+				<a class="btn btn-primary btn-sm float-right" href="form.html"
+					th:href="@{/build}">Search Build</a>
+			</div>
+
+		</div>
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
