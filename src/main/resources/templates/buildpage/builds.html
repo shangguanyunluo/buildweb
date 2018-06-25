@@ -3,23 +3,51 @@
 <head th:replace="fragments :: head(title=~{::title/text()})">
 <title>Build : View all</title>
 </head>
-</head>
+<script type="text/javascript">
+	function getDirectories(elementId, parentId) {
+		$.ajax({
+			type : "GET",
+			url : "http://localhost:8080/cloudbuild/build/directories",
+			data : "parendId=" + parentId,
+			success : function(msg) {
+				$.each(msg, function(i, directory) {
+					//alert("Item #" + i + ": " + directory.id + ": " + directory.name);
+					var option = '<option id="' + directory.id + '">' + directory.name + '</option>';
+					//alert(option);
+					$("#" + elementId).append(option);
+					// 缺一不可  
+					$("#" + elementId).selectpicker('refresh');
+					$("#" + elementId).selectpicker('render');
+				});
+			}
+		});
+	}
+	$(function() {
+
+		$("#projectName").click(function() {
+			getDirectories(null, this.id)
+		})
+
+	});
+</script>
 <body>
 	<div class="container">
 		<div th:replace="fragments :: cloudbuild-navbar"></div>
 
 		<div class="float-left m-2 col-sm-12 row pl-0 pr-0">
-			<div class="col-sm-3 float-left pl-0">
-				<select class="form-control  pl-0">
-					<option>Mustard</option>
-					<option>Ketchup</option>
-					<option>Relish</option>
-				</select>
+			<div class="col-sm-3 pl-0">
+				<div class="form-group">
+					<label for="projectName" class="control-label">Product
+						Name:</label> <select id="projectName"
+						class="form-control selectpicker   form-control  pl-0"  data-live-search="true">
+						<option selected="selected">All</option>
+					</select>
+				</div>
 
 			</div>
 			<div class="col-sm-3  ml-0">
-				<select
-					class="selectpicker show-menu-arrow bootstrap-select  form-control">
+				<label>Branch Name:</label><select
+					class="selectpicker bootstrap-select  form-control">
 					<option>Mustard</option>
 					<option>Ketchup</option>
 					<option>Relish</option>
@@ -27,14 +55,14 @@
 
 			</div>
 			<div class="col-sm-3">
-				<select
+				<label>Build Type:</label><select
 					class="selectpicker show-menu-arrow bootstrap-select  form-control">
 					<option>Mustard</option>
 					<option>Ketchup</option>
 					<option>Relish</option>
 				</select>
 			</div>
-			<div  class="col-sm-3 mt-1 float-right">
+			<div class="col-sm-3 mt-1 float-right">
 				<a class="btn btn-primary btn-sm float-right" href="form.html"
 					th:href="@{/build}">Search Build</a>
 			</div>
@@ -48,7 +76,7 @@
 					<th>Last Modified</th>
 					<th>Size</th>
 					<th>Description</th>
-					<th>Operation</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>

@@ -2,6 +2,7 @@ package com.lenovo.cloudbuild.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import com.lenovo.cloudbuild.model.BuildImage;
 import com.lenovo.cloudbuild.model.Directory;
@@ -13,7 +14,8 @@ public interface BuildImageService {
 	 */
 	Iterable<BuildImage> listDirectory(File dir) throws IOException;
 	
-	public Iterable<Directory> getDirectorys(File dir, Long parentId);
+	public  Collection<Directory> getDirectorys(File dir, Long parentId);
+	public  Collection<Directory> getDirectorys(Long parentId);
 
 	Iterable<BuildImage> findAll();
 

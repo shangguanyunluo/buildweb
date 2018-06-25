@@ -2,7 +2,10 @@ package com.lenovo.cloudbuild.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -64,7 +67,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 		return builds.values();
 	}
 
-	public Iterable<Directory> getDirectorys(File dir, Long parentId) {
+	public Collection<Directory> getDirectorys(File dir, Long parentId) {
 		if (!dir.exists())
 			throw new IllegalArgumentException("Directory:" + dir + "not exists.");
 		if (!dir.isDirectory()) {
@@ -74,13 +77,27 @@ public class BuildImageServiceImpl implements BuildImageService {
 		File[] listFiles = dir.listFiles();
 		for (File file : listFiles) {
 			if (file.isDirectory()) {
-				long directoryId = counter.incrementAndGet();
-				directorys.put(directoryId, new Directory(directoryId, file.getName(), parentId));
-				getDirectorys(file, directoryId);
+				Directory directory = new Directory(file.getName(), file.getAbsolutePath(), parentId);
+				if (!directorys.values().contains(directory)) {
+					long directoryId = counter.incrementAndGet();
+					directory.setId(directoryId);
+					directorys.put(directoryId, directory);
+					getDirectorys(file, directoryId);
+				}
 			}
-//			System.out.println(file);
+			// System.out.println(file);
 		}
 		return directorys.values();
+	}
+
+	public Collection<Directory> getDirectorys(Long parentId) {
+		List<Directory> directoryList = new ArrayList<Directory>();
+		for (Directory directory : this.directorys.values()) {
+			if (directory.getParentId() == parentId) {
+				directoryList.add(directory);
+			}
+		}
+		return directoryList;
 	}
 
 	@Override
@@ -92,7 +109,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 	public BuildImage getBuildById(Long id) {
 		return builds.get(id);
 	}
-
+	
 	@Override
 	public String getBuildBaseDir() {
 		return globalVariables.getBuildImageBaseDir();

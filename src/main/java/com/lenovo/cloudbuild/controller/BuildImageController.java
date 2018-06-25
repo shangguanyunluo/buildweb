@@ -3,6 +3,7 @@ package com.lenovo.cloudbuild.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -13,10 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.lenovo.cloudbuild.model.BuildImage;
@@ -30,7 +31,7 @@ import com.lenovo.cloudbuild.service.BuildImageService;
  * @date 2018年6月21日
  */
 @Controller
-@RequestMapping(value = "build")
+@RequestMapping(value = "/build")
 public class BuildImageController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
@@ -38,24 +39,24 @@ public class BuildImageController {
 	@Autowired
 	private BuildImageService buildService;
 
-	/*@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView findall() throws IOException {
-		
+	@RequestMapping(value = "/directories", method = RequestMethod.GET)
+	@ResponseBody
+	public Iterable<Directory> findDirectories(@RequestParam(required = false) Long parentId) throws IOException {
+
 		File buildDirectory = new File(buildService.getBuildBaseDir());
+		buildService.getDirectorys(buildDirectory, null); // 初始化数据，当数据存入数据库以后需要调整
+		Collection<Directory> directorys = buildService.getDirectorys(parentId);
+		log.info("parentId : " + parentId + " size : " + directorys.size());
+		return directorys;
+	}
 
-		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
-
-		return new ModelAndView("buildpage/builds", "builds", builds);
-	}*/
-	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView findall(@RequestParam(required=false) String[] directoryName) throws IOException {
-		
+	public ModelAndView listBuildImages(@RequestParam(required = false) String[] directoryName) throws IOException {
+
 		System.out.println(directoryName);
 		File buildDirectory = new File(buildService.getBuildBaseDir());
-		
-//		Iterable<Directory> directorys = buildService.getDirectorys(buildDirectory, null);
 
+		// 初始化数据，每次都会遍历整个目录，性能会有损耗，当数据存入数据库以后需要调整
 		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
 
 		return new ModelAndView("buildpage/builds", "builds", builds);
