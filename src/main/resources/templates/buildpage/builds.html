@@ -3,14 +3,9 @@
 <head th:replace="fragments :: head(title=~{::title/text()})">
 <title>Build : View all</title>
 </head>
-<script type="text/javascript"
-	th:src="@{/webjars/bootstrap-select/dist/js/bootstrap-select.min.js} "></script>
-<link
-	th:href="@{/webjars/bootstrap-select/dist/css/bootstrap-select.min.css}"
-	rel="stylesheet"></link>
-<script type="text/javascript"
-	th:src="@{/webjars/popper.js/1.14.1/dist/popper.js} "></script>
-
+<script th:src="@{/webjars/bootstrap/dist/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.js}"></script>
+<!-- <script type="text/javascript" th:src="@{/webjars/bootstrap/js/dist/dropdown.js}"></script> -->
 <script type="text/javascript">
 	function getDirectories(elementId, parentId) {
 		$.ajax({
@@ -18,14 +13,11 @@
 			url : "http://localhost:8080/cloudbuild/build/directories",
 			data : "parendId=" + parentId,
 			success : function(msg) {
+				$("#" + elementId).empty();
 				$.each(msg, function(i, directory) {
-					//alert("Item #" + i + ": " + directory.id + ": " + directory.name);
+
 					var option = '<option id="' + directory.id + '">' + directory.name + '</option>';
-					//alert(option);
 					$("#" + elementId).append(option);
-					// 缺一不可  
-					$("#" + elementId).selectpicker('refresh');
-					$("#" + elementId).selectpicker('render');
 				});
 			}
 		});
@@ -33,7 +25,7 @@
 	$(function() {
 
 		$("#projectName").click(function() {
-			getDirectories(null, this.id)
+			getDirectories(this.id, null)
 		})
 
 	});
@@ -46,8 +38,7 @@
 			<div class="col-sm-3 pl-0">
 				<div class="form-group">
 					<label for="projectName" class="control-label">Product
-						Name:</label> <select id="projectName"
-						class="form-control selectpicker   form-control  pl-0"
+						Name:</label> <select id="projectName" class="form-control pl-0"
 						data-live-search="true">
 						<option selected="selected">All</option>
 					</select>
@@ -56,7 +47,7 @@
 			</div>
 			<div class="col-sm-3  ml-0">
 				<label>Branch Name:</label><select
-					class="selectpicker bootstrap-select  form-control">
+					class="bootstrap-select  form-control">
 					<option>Mustard</option>
 					<option>Ketchup</option>
 					<option>Relish</option>
@@ -65,7 +56,7 @@
 			</div>
 			<div class="col-sm-3">
 				<label>Build Type:</label><select
-					class="selectpicker show-menu-arrow bootstrap-select  form-control">
+					class="show-menu-arrow bootstrap-select  form-control">
 					<option>Mustard</option>
 					<option>Ketchup</option>
 					<option>Relish</option>
@@ -77,6 +68,7 @@
 			</div>
 
 		</div>
+		<div class="clearfix"></div>
 		<table class="table table-bordered table-striped">
 			<thead>
 				<tr>
