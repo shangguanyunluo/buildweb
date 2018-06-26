@@ -23,9 +23,7 @@
 			url : "http://localhost:8080/cloudbuild/build/directories",
 			data : {"parentId":parentId},
 			success : function(msg) {
-				
 				$.each(msg, function(i, directory) {
-
 					var option = '<option id="' + directory.id + '">' + directory.name + '</option>';
 					//alert(optionsArray+"---------------"+$.inArray(directory.name, optionsArray))
 					if($.inArray(directory.name, optionsArray)<0){
@@ -59,13 +57,17 @@
 		    if(branchNameDirectoryId){
 			    getDirectories(this.id, branchNameDirectoryId)
 		    }else{
-			    alert("no   id====="+branchNameDirectoryId)
+			    //alert("no   id====="+branchNameDirectoryId)
 		    }
 		}) 
 		
 		$("#buildSearch").click(function() {
-			var val=$("#projectName").val()
-			alert(val)
+			
+			var projectNameDirectoryId=$("#projectName option:selected").attr('id');
+			var branchNameDirectoryId=$("#branchName option:selected").attr('id');
+			var buildTypeDirectoryId=$("#buildType option:selected").attr('id');
+			alert("projectNameDirectoryId:"+projectNameDirectoryId+" branchNameDirectoryId:"+branchNameDirectoryId+
+			" buildTypeDirectoryId:"+buildTypeDirectoryId);
 		})
 	});
 </script>
