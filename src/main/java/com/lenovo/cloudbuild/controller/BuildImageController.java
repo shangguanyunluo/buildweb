@@ -45,8 +45,9 @@ public class BuildImageController {
 
 		File buildDirectory = new File(buildService.getBuildBaseDir());
 		buildService.getDirectorys(buildDirectory, null); // 初始化数据，当数据存入数据库以后需要调整
+//		return buildService.getDirectorys(buildDirectory, null); // 初始化数据，当数据存入数据库以后需要调整
 		Collection<Directory> directorys = buildService.getDirectorys(parentId);
-		log.info("parentId : " + parentId + " size : " + directorys.size());
+		log.info("parentId : " + parentId + " directory size : " + directorys.size());
 		return directorys;
 	}
 

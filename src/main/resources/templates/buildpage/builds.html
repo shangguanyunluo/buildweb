@@ -4,20 +4,28 @@
 <title>Build : View all</title>
 </head>
 <script th:src="@{/webjars/bootstrap/dist/js/bootstrap.min.js}"></script>
-<script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.js}"></script>
+<!-- <script th:src="@{/webjars/bootstrap-select/js/bootstrap-select.js}"></script> -->
 <!-- <script type="text/javascript" th:src="@{/webjars/bootstrap/js/dist/dropdown.js}"></script> -->
 <script type="text/javascript">
 	function getDirectories(elementId, parentId) {
+		var optionsArray = Array();
+		var options=$("#"+elementId).children();
+		for(var i=0;i<options.length;i++){
+			optionsArray.push(options[i].value)
+		}
 		$.ajax({
 			type : "GET",
 			url : "http://localhost:8080/cloudbuild/build/directories",
-			data : "parendId=" + parentId,
+			data : {"parentId":parentId},
 			success : function(msg) {
-				$("#" + elementId).empty();
+				
 				$.each(msg, function(i, directory) {
 
 					var option = '<option id="' + directory.id + '">' + directory.name + '</option>';
-					$("#" + elementId).append(option);
+					//alert(optionsArray+"---------------"+$.inArray(directory.name, optionsArray))
+					if($.inArray(directory.name, optionsArray)<0){
+		               $("#" + elementId).append(option);
+		       		}
 				});
 			}
 		});
@@ -25,9 +33,33 @@
 	$(function() {
 
 		$("#projectName").click(function() {
+			
 			getDirectories(this.id, null)
 		})
 
+		$("#branchName").click(function() {
+		    var projectNameDirectoryId=$("#projectName option:selected").attr('id');
+		    if(projectNameDirectoryId){
+			    getDirectories(this.id, projectNameDirectoryId)
+		    }else{
+			    //alert("no   id====="+projectNameDirectoryId)
+		    }
+			
+		})
+
+		$("#buildType").click(function() {
+			var branchNameDirectoryId=$("#branchName option:selected").attr('id');
+		    if(branchNameDirectoryId){
+			    getDirectories(this.id, branchNameDirectoryId)
+		    }else{
+			    alert("no   id====="+projectNameDirectoryId)
+		    }
+		}) 
+		
+		$("#buildSearch").click(function() {
+			var val=$("#projectName").val()
+			alert(val)
+		})
 	});
 </script>
 <body>
@@ -37,34 +69,28 @@
 		<div class="float-left m-2 col-sm-12 row pl-0 pr-0">
 			<div class="col-sm-3 pl-0">
 				<div class="form-group">
-					<label for="projectName" class="control-label">Product
-						Name:</label> <select id="projectName" class="form-control pl-0"
-						data-live-search="true">
-						<option selected="selected">All</option>
+					<label for="projectName" class="control-label">Product Name:</label>
+					<select id="projectName" class="form-control pl-0">
+						<option>All</option>
 					</select>
 				</div>
 
 			</div>
 			<div class="col-sm-3  ml-0">
-				<label>Branch Name:</label><select
-					class="bootstrap-select  form-control">
-					<option>Mustard</option>
-					<option>Ketchup</option>
-					<option>Relish</option>
+				<label for="branchName" class="control-label">Branch Name:</label> 
+				<select id="branchName" class="bootstrap-select  form-control">
+					<option>All</option>
 				</select>
 
 			</div>
 			<div class="col-sm-3">
-				<label>Build Type:</label><select
-					class="show-menu-arrow bootstrap-select  form-control">
-					<option>Mustard</option>
-					<option>Ketchup</option>
-					<option>Relish</option>
+				<label for="buildType" class="control-label">Build Type:</label> 
+				<select id="buildType" class="bootstrap-select  form-control">
+					<option>All</option>
 				</select>
 			</div>
 			<div class="col-sm-3 mt-1 float-right">
-				<a class="btn btn-primary btn-sm float-right" href="form.html"
-					th:href="@{/build}">Search Build</a>
+				<a id="buildSearch" class="btn btn-primary btn-sm float-right">Search Build</a><!--th:href="@{/build}"  -->
 			</div>
 
 		</div>

@@ -27,7 +27,8 @@ public class BuildImageServiceImpl implements BuildImageService {
 	@Autowired
 	private GlobalVariables globalVariables;
 
-	private static AtomicLong counter = new AtomicLong();
+	private static AtomicLong bunildImageCounter = new AtomicLong();
+	private static AtomicLong directoryCounter = new AtomicLong();
 	private final ConcurrentMap<Long, BuildImage> builds = new ConcurrentHashMap<Long, BuildImage>();
 	private final ConcurrentMap<Long, Directory> directorys = new ConcurrentHashMap<Long, Directory>();
 
@@ -56,7 +57,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 					log.info("builds contains buildImage " + file.getName() + " :"
 							+ builds.values().contains(buildImage));
 					if (!builds.values().contains(buildImage)) {
-						Long imageId = counter.incrementAndGet();
+						Long imageId = bunildImageCounter.incrementAndGet();
 						buildImage.setId(imageId);
 						builds.put(imageId, buildImage);
 					}
@@ -79,7 +80,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 			if (file.isDirectory()) {
 				Directory directory = new Directory(file.getName(), file.getAbsolutePath(), parentId);
 				if (!directorys.values().contains(directory)) {
-					long directoryId = counter.incrementAndGet();
+					long directoryId = directoryCounter.incrementAndGet();
 					directory.setId(directoryId);
 					directorys.put(directoryId, directory);
 					getDirectorys(file, directoryId);
