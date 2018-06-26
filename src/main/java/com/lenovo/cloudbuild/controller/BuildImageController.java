@@ -3,6 +3,7 @@ package com.lenovo.cloudbuild.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
@@ -45,7 +46,8 @@ public class BuildImageController {
 
 		File buildDirectory = new File(buildService.getBuildBaseDir());
 		buildService.getDirectorys(buildDirectory, null); // 初始化数据，当数据存入数据库以后需要调整
-//		return buildService.getDirectorys(buildDirectory, null); // 初始化数据，当数据存入数据库以后需要调整
+		// return buildService.getDirectorys(buildDirectory, null); //
+		// 初始化数据，当数据存入数据库以后需要调整
 		Collection<Directory> directorys = buildService.getDirectorys(parentId);
 		log.info("parentId : " + parentId + " directory size : " + directorys);
 		return directorys;
@@ -54,8 +56,10 @@ public class BuildImageController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listBuildImages(@RequestParam(required = false) String[] directoryName) throws IOException {
 
-		System.out.println(directoryName);
+		log.info("directoryName : " + Arrays.toString(directoryName));
 		File buildDirectory = new File(buildService.getBuildBaseDir());
+//		String buildBaseDir = buildService.getBuildBaseDir();
+		
 
 		// 初始化数据，每次都会遍历整个目录，性能会有损耗，当数据存入数据库以后需要调整
 		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
