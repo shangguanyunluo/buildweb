@@ -12,7 +12,8 @@ public interface BuildImageService {
 	/*
 	 * 列出指定目录下（包括其子目录）的所有文件
 	 */
-	Iterable<BuildImage> listDirectory(File dir) throws IOException;
+	Iterable<BuildImage> listAllBuildImages(File dir) throws IOException;
+	Iterable<BuildImage> listBuildImages(File buildImageDirectory) throws IOException;
 	
 	public  Collection<Directory> getDirectorys(File dir, Long parentId);
 	public  Collection<Directory> getDirectorys(Long parentId);

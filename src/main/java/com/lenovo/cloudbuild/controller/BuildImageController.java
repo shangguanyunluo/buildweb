@@ -3,6 +3,7 @@ package com.lenovo.cloudbuild.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.lenovo.cloudbuild.model.BuildImage;
 import com.lenovo.cloudbuild.model.Directory;
 import com.lenovo.cloudbuild.service.BuildImageService;
+import com.lenovo.cloudbuild.util.CommonUtils;
 
 /**
  * @ClassName BuildImageController
@@ -55,15 +57,26 @@ public class BuildImageController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView listBuildImages(@RequestParam(required = false) String[] directoryName) throws IOException {
-
 		log.info("directoryName : " + Arrays.toString(directoryName));
 		File buildDirectory = new File(buildService.getBuildBaseDir());
-//		String buildBaseDir = buildService.getBuildBaseDir();
-		
+		Iterable<BuildImage> builds = new ArrayList<BuildImage>();
 
-		// 初始化数据，每次都会遍历整个目录，性能会有损耗，当数据存入数据库以后需要调整
-		Iterable<BuildImage> builds = buildService.listDirectory(buildDirectory);
+		if (directoryName == null) {
+			// 初始化数据，每次都会遍历整个目录，性能会有损耗，当数据存入数据库以后需要调整
+			builds = buildService.listAllBuildImages(buildDirectory);
+		} else {
+			for (String name : directoryName) {
+				if (!CommonUtils.isNull(name)) {
+					File newDirectory = new File(buildDirectory, name);
+					if (newDirectory.exists()) {
+						buildDirectory = new File(buildDirectory, name);
+					}
+				}
+			}
+			builds = buildService.listBuildImages(buildDirectory);
+		}
 
+		log.info("buildDirectory : " + buildDirectory.getPath());
 		return new ModelAndView("buildpage/builds", "builds", builds);
 	}
 

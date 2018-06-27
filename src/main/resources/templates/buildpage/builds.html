@@ -33,6 +33,18 @@
 			}
 		});
 	}
+	
+	function selectBuildImageByDirectoryName(directoryId){
+		var directoryNme;
+		var directory=$("#"+directoryId+" option:selected");
+		var directoryOptionId=directory.attr('id');
+		if(directoryOptionId){
+			directoryNme="directoryName="+directory.val();
+			return directoryNme;
+		}
+		return "";
+	}
+	
 	$(function() {
 
 		$("#projectName").click(function() {
@@ -62,12 +74,20 @@
 		}) 
 		
 		$("#buildSearch").click(function() {
-			
+			var url="";
+			var projectName = selectBuildImageByDirectoryName("projectName");
+			var branchName = selectBuildImageByDirectoryName("branchName");
+			var buildType = selectBuildImageByDirectoryName("buildType");
+			url=projectName+branchName+buildType;
+			alert("url:"+url)
+			/* 
 			var projectNameDirectoryId=$("#projectName option:selected").attr('id');
-			var branchNameDirectoryId=$("#branchName option:selected").attr('id');
-			var buildTypeDirectoryId=$("#buildType option:selected").attr('id');
+			if(projectNameDirectoryId){
+				url+="directoryName="+directoryName;
+			}
+			alert("url:"+url)
 			alert("projectNameDirectoryId:"+projectNameDirectoryId+" branchNameDirectoryId:"+branchNameDirectoryId+
-			" buildTypeDirectoryId:"+buildTypeDirectoryId);
+			" buildTypeDirectoryId:"+buildTypeDirectoryId); */
 		})
 	});
 </script>

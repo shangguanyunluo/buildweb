@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -36,13 +38,19 @@ public class BuildImageServiceImpl implements BuildImageService {
 	 * 列出指定目录下（包括其子目录）的所有文件
 	 */
 	@Override
-	public Iterable<BuildImage> listDirectory(File dir) throws IOException {
+	public Iterable<BuildImage> listAllBuildImages(File dir) throws IOException {
 		if (!dir.exists())
 			throw new IllegalArgumentException("Directory:" + dir + "not exists.");
 		if (!dir.isDirectory()) {
 			throw new IllegalArgumentException(dir + "isn't directory.");
 		}
 
+		listAllFiles(dir, builds, bunildImageCounter);
+		return builds.values();
+	}
+
+	private void listAllFiles(File dir, Map<Long, BuildImage> builds, AtomicLong bunildImageCounter)
+			throws IOException {
 		// 如果要遍历子目录下的内容就需要构造File对象做递归操作，File提供了直接返回File对象的API
 		File[] files = dir.listFiles();
 
@@ -50,7 +58,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 			for (File file : files) {
 				if (file.isDirectory())
 					// 递归
-					listDirectory(file);
+					listAllFiles(file, builds, bunildImageCounter);
 				else {
 					BuildImage buildImage = new BuildImage(file.getName(), new Date(file.lastModified()), file.length(),
 							"", file.getAbsolutePath());
@@ -65,7 +73,16 @@ public class BuildImageServiceImpl implements BuildImageService {
 				}
 			}
 		}
-		return builds.values();
+	}
+
+	/*
+	 * 列出指定目录下的所有文件
+	 */
+	@Override
+	public Iterable<BuildImage> listBuildImages(File buildImageDirectory) throws IOException {
+		Map<Long, BuildImage> buildImages = new HashMap<Long, BuildImage>();
+		listAllFiles(buildImageDirectory, buildImages, new AtomicLong());
+		return buildImages.values();
 	}
 
 	public Collection<Directory> getDirectorys(File dir, Long parentId) {
@@ -110,7 +127,7 @@ public class BuildImageServiceImpl implements BuildImageService {
 	public BuildImage getBuildById(Long id) {
 		return builds.get(id);
 	}
-	
+
 	@Override
 	public String getBuildBaseDir() {
 		return globalVariables.getBuildImageBaseDir();
