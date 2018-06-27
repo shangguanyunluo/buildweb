@@ -96,29 +96,29 @@
 		<div th:replace="fragments :: cloudbuild-navbar"></div>
 
 		<div class="float-left m-2 col-sm-12 row pl-0 pr-0">
-			<div class="col-sm-3 pl-0">
-				<div class="form-group">
-					<label for="projectName" class="control-label">Product Name:</label>
+			
+			<!-- <div class="form-group col-sm-3 "> -->
+				<label for="projectName" class="control-label m-2">Product Name:</label>
+				<div class="col-sm-2  ml-0">
 					<select id="projectName" class="form-control pl-0">
 						<option>All</option> 
 					</select>
-				</div>
-
-			</div>
-			<div class="col-sm-3  ml-0">
-				<label for="branchName" class="control-label">Branch Name:</label> 
+				 </div>
+			<!--</div> -->
+			<label for="branchName" class="control-label m-2">Branch Name:</label> 
+			<div class="col-sm-2  ml-0">
 				<select id="branchName" class="bootstrap-select  form-control">
 					<option>All</option>
 				</select>
 
 			</div>
-			<div class="col-sm-3">
-				<label for="buildType" class="control-label">Build Type:</label> 
+			<label for="buildType" class="control-label m-2">Build Type:</label> 
+			<div class="col-sm-2">
 				<select id="buildType" class="bootstrap-select  form-control">
 					<option>All</option>
 				</select>
 			</div>
-			<div class="col-sm-3 mt-1 float-right">
+			<div class="col-sm-2 mt-1 float-right">
 				<a id="buildSearch" class="btn btn-primary btn-sm float-right">Search Build</a><!--th:href="@{/build}"  -->
 			</div>
 
