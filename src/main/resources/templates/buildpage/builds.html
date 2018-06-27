@@ -39,7 +39,7 @@
 		var directory=$("#"+directoryId+" option:selected");
 		var directoryOptionId=directory.attr('id');
 		if(directoryOptionId){
-			directoryNme="directoryName="+directory.val();
+			directoryNme="&directoryName="+directory.val();
 			return directoryNme;
 		}
 		return "";
@@ -50,6 +50,7 @@
 		$("#projectName").click(function() {
 			getDirectories(this.id, null);
 			emptySelect("branchName");
+			emptySelect("buildType");
 			
 		})
 
@@ -74,20 +75,14 @@
 		}) 
 		
 		$("#buildSearch").click(function() {
-			var url="";
+			var url="/cloudbuild/build?";
 			var projectName = selectBuildImageByDirectoryName("projectName");
 			var branchName = selectBuildImageByDirectoryName("branchName");
 			var buildType = selectBuildImageByDirectoryName("buildType");
-			url=projectName+branchName+buildType;
-			alert("url:"+url)
-			/* 
-			var projectNameDirectoryId=$("#projectName option:selected").attr('id');
-			if(projectNameDirectoryId){
-				url+="directoryName="+directoryName;
-			}
-			alert("url:"+url)
-			alert("projectNameDirectoryId:"+projectNameDirectoryId+" branchNameDirectoryId:"+branchNameDirectoryId+
-			" buildTypeDirectoryId:"+buildTypeDirectoryId); */
+			var directories=projectName+branchName+buildType;
+			url=url+directories.substring(1);
+			//alert("url:"+url)
+			window.location.href=url;
 		})
 	});
 </script>

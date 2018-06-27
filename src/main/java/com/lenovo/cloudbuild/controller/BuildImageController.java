@@ -69,7 +69,7 @@ public class BuildImageController {
 				if (!CommonUtils.isNull(name)) {
 					File newDirectory = new File(buildDirectory, name);
 					if (newDirectory.exists()) {
-						buildDirectory = new File(buildDirectory, name);
+						buildDirectory = newDirectory;
 					}
 				}
 			}
