@@ -52,7 +52,7 @@
 	} 
 	$(function() {
 
-		$("#projectName").click(function() {
+		/* $("#projectName").click(function() {
 			getDirectories(this.id, null);
 			emptySelect("branchName");
 			emptySelect("buildType");
@@ -77,8 +77,30 @@
 		    }else{
 			    //alert("no   id====="+branchNameDirectoryId)
 		    }
-		}) 
+		})  */
 		
+		getDirectories("projectName", null);
+		$("#projectName").bind("change",function(){
+			emptySelect("branchName");
+			emptySelect("buildType");
+            var projectNameDirectoryId=$("#projectName option:selected").attr('id');
+            if(projectNameDirectoryId){
+			    getDirectories("branchName", projectNameDirectoryId)
+		    }else{
+			    //alert("no   id====="+projectNameDirectoryId)
+		    }
+        });
+        
+		$("#branchName").bind("change",function(){
+		 	emptySelect("buildType");
+            var branchNameDirectoryId=$("#branchName option:selected").attr('id');
+		    if(branchNameDirectoryId){
+			    getDirectories("buildType", branchNameDirectoryId)
+		    }else{
+			    //alert("no   id====="+branchNameDirectoryId)
+		    }
+        });
+        
 		$("#buildSearch").click(function() {
 			var url=getRootPath()+"build?";
 			var projectName = selectBuildImageByDirectoryName("projectName");

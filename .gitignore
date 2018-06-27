@@ -4,6 +4,7 @@
 .mvn
 .settings
 target
+bin
 
 # Log file
 *.log
