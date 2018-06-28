@@ -20,7 +20,7 @@
 		}
 		$.ajax({
 			type : "GET",
-			url : "http://localhost:8080/cloudbuild/build/directories",
+			url : getRootPath()+"build/directories",
 			data : {"parentId":parentId},
 			success : function(msg) {
 				$.each(msg, function(i, directory) {
