@@ -15,8 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.lenovo.cloudbuild.mapper.MessageMaper;
 import com.lenovo.cloudbuild.model.Message;
 
-@Controller
-@RequestMapping("/")
+//@Controller
+//@RequestMapping("/")
 public class MessageController {
 
 	private final MessageMaper messageMaper;
