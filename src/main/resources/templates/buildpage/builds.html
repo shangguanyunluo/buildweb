@@ -20,7 +20,7 @@
 		}
 		$.ajax({
 			type : "GET",
-			url : getRootPath()+"build/directories",
+			url : getRootPath()+"directories",
 			data : {"parentId":parentId},
 			success : function(msg) {
 				$.each(msg, function(i, directory) {
@@ -51,34 +51,6 @@
 	    return window.location.protocol + '//' + window.location.host + '/' + webName + '/';  
 	} 
 	$(function() {
-
-		/* $("#projectName").click(function() {
-			getDirectories(this.id, null);
-			emptySelect("branchName");
-			emptySelect("buildType");
-			
-		})
-
-		$("#branchName").click(function() {
-		    var projectNameDirectoryId=$("#projectName option:selected").attr('id');
-		    if(projectNameDirectoryId){
-			    getDirectories(this.id, projectNameDirectoryId)
-			    emptySelect("buildType");
-		    }else{
-			    //alert("no   id====="+projectNameDirectoryId)
-		    }
-			
-		})
-
-		$("#buildType").click(function() {
-			var branchNameDirectoryId=$("#branchName option:selected").attr('id');
-		    if(branchNameDirectoryId){
-			    getDirectories(this.id, branchNameDirectoryId)
-		    }else{
-			    //alert("no   id====="+branchNameDirectoryId)
-		    }
-		})  */
-		
 		getDirectories("projectName", null);
 		$("#projectName").bind("change",function(){
 			emptySelect("branchName");
@@ -102,7 +74,8 @@
         });
         
 		$("#buildSearch").click(function() {
-			var url=getRootPath()+"build?";
+			var url=getRootPath();
+			url=url.substring(0,url.length-1)+"?";
 			var projectName = selectBuildImageByDirectoryName("projectName");
 			var branchName = selectBuildImageByDirectoryName("branchName");
 			var buildType = selectBuildImageByDirectoryName("buildType");
@@ -169,7 +142,7 @@
 						11, 2012 2:17:16 PM CDT</td>
 					<td th:text="${build.size}">Size</td>
 					<td th:text="${build.description}">Description</td>
-					<td><a th:href="@{/build/download(id=${build.id})}" href="#">Download</a></td>
+					<td><a th:href="@{/download(buildFilePath=${build.absolutePath})}" href="#">Download</a></td>
 				</tr>
 			</tbody>
 		</table>

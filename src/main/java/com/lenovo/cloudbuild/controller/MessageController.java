@@ -16,7 +16,7 @@ import com.lenovo.cloudbuild.mapper.MessageMaper;
 import com.lenovo.cloudbuild.model.Message;
 
 //@Controller
-//@RequestMapping("/")
+//@RequestMapping("/message")
 public class MessageController {
 
 	private final MessageMaper messageMaper;

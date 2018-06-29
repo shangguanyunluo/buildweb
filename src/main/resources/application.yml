@@ -1,7 +1,7 @@
 server:
   servlet:
-    context-path: /cloudbuild
+    context-path: /buildweb
 
-spring:
-  thymeleaf:
-    cache: false
+#spring:
+#  thymeleaf:
+#    cache: false

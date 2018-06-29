@@ -34,7 +34,7 @@ import com.lenovo.cloudbuild.util.CommonUtils;
  * @date 2018年6月21日
  */
 @Controller
-@RequestMapping(value = "/build")
+@RequestMapping(value = "/")
 public class BuildImageController {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
@@ -81,14 +81,13 @@ public class BuildImageController {
 	}
 
 	@RequestMapping("/download")
-	public ResponseEntity<byte[]> download(@RequestParam Long id) throws IOException {
-		BuildImage buildImage = buildService.getBuildById(id);
-
-		String fileName = buildImage.getName();
-		File downLoadFile = new File(buildImage.getAbsolutePath());
+	public ResponseEntity<byte[]> download(@RequestParam String buildFilePath) throws IOException {
+		log.info("Download image:" + buildFilePath);
+		File downLoadFile = new File(buildFilePath);
+		String fileName = downLoadFile.getName();
 		if (!downLoadFile.exists()) {
-			log.error(fileName + " can't be found.");
-			throw new FileNotFoundException(fileName + " can't be found.");
+			log.error(buildFilePath + " can't be found.");
+			throw new FileNotFoundException(buildFilePath + " can't be found.");
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -97,5 +96,24 @@ public class BuildImageController {
 
 		return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(downLoadFile), headers, HttpStatus.CREATED);
 	}
+
+	/*
+	 * @RequestMapping("/download") public ResponseEntity<byte[]>
+	 * download(@RequestParam Long id) throws IOException { BuildImage
+	 * buildImage = buildService.getBuildById(id);
+	 * 
+	 * String fileName = buildImage.getName(); File downLoadFile = new
+	 * File(buildImage.getAbsolutePath()); if (!downLoadFile.exists()) {
+	 * log.error(fileName + " can't be found."); throw new
+	 * FileNotFoundException(fileName + " can't be found."); } HttpHeaders
+	 * headers = new HttpHeaders();
+	 * headers.setContentType(MediaType.APPLICATION_OCTET_STREAM); String
+	 * dfileName = new String(fileName.getBytes("utf-8"), "iso8859-1");
+	 * headers.setContentDispositionFormData("attachment", dfileName);
+	 * 
+	 * return new
+	 * ResponseEntity<byte[]>(FileUtils.readFileToByteArray(downLoadFile),
+	 * headers, HttpStatus.CREATED); }
+	 */
 
 }
